@@ -9,11 +9,12 @@ public class DinoInstanceVisual : MonoBehaviour
     public SpriteRenderer _dinoSprite;
     public SpriteRenderer _lane;
     public Slider _health;
-    public Slider _charge;
 
     public DinoInstance _instance;
     private DinoInstanceVisual _opponent;
     private CombatController _controller;
+
+    private Vector2 _laneSize = Vector2.one;
 
     private void Awake()
     {
@@ -29,7 +30,6 @@ public class DinoInstanceVisual : MonoBehaviour
         c.a = 0.5f;
         _lane.color = c;
         _health.maxValue = _instance._health;
-        _charge.maxValue = _controller._chargeMaxValue;
         SetUI();
     }
 
@@ -39,7 +39,7 @@ public class DinoInstanceVisual : MonoBehaviour
 
         SetUI();
 
-        if (_instance._charge >= _charge.maxValue)
+        if (_instance._charge >= _controller._chargeMaxValue)
         {
             yield return new WaitForSeconds(0.2f);
             _instance._charge = 0;
@@ -65,7 +65,8 @@ public class DinoInstanceVisual : MonoBehaviour
     private void SetUI()
     {
         _health.value = _instance._health;
-        _charge.value = _instance._charge;
+        _laneSize.x = _instance._charge / _controller._chargeMaxValue;
+        _lane.size = _laneSize;
     }
 
     private float GetDamage()
